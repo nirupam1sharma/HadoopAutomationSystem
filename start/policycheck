@@ -1,0 +1,12 @@
+#!/bin/bash
+df -hT |head -2 |grep /dev|awk '{print $5}'>ss
+sed -i 's/G//' ss
+spc=`cat ss`
+spc=`echo "$spc*1024" |bc `
+rm ss
+fr=`free -m | grep Mem: | awk '{print $4}'`
+echo -e "storage:$spc" >poli.txt
+echo -e "memoryfree:$fr" >>poli.txt
+
+
+

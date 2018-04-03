@@ -1,0 +1,17 @@
+#!/bin/bash
+dialog --menu "####summary####" 40 40 7 "1.namenode" "" "2.datanode" "" "3.back" "" 2>x
+y=`cat x`
+rm x
+if [ $y == "1.namenode" ] 
+then
+dialog --textbox  /root/Desktop/my_project/files/nn  20 30
+sleep 3
+elif [ $y == "2.datanode" ]
+then
+dialog --textbox  /root/Desktop/my_project/files/dn  40 30
+sleep 3
+elif [ $y == "3.back" ]
+then
+dialog --msgbox "to go back press ok " 20 30
+bash hdfs1conf
+fi

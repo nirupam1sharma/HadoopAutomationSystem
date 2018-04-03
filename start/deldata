@@ -1,0 +1,49 @@
+#!/bin/bash
+dialog --menu "Are you sure you want to continue " 30 30 5 "1.continue" "" "2.back" "" 2> yn
+a=`cat yn`
+rm yn
+if [ $a == "1.continue" ] 
+then
+dialog --menu "Choose option " 30 40 5 "1.Deleteall" "" "2.Deletespecefic" "" "3.Back" "" 2 >dech
+b=`cat dech`
+rm dech
+if[ $b == "Deleteall" ]
+then
+for x in `cat /root/Desktop/my_project/files/dn`
+do
+ssh $x yum remove hadoop -y
+ssh $x rmdir /tmp/node
+sed -i 's/$x//' /root/Desktop/my_project/files/ipused
+done
+for x in `cat /root/Desktop/my_project/files/dn`
+do
+sed -i 's/$x//' /root/Desktop/my_project/files/dn
+done
+echo "no" > /root/Desktop/my_project/files/hdfspresent
+bash hdfs1conf
+elif [ $b == "2.Deletespecefic" ]
+then
+c=1
+while [ $c == 1 ]
+do 
+dialog --infobox "list of data nodes is " 30 30
+sleep 1
+dialog --textbox /root/Desktop/my_project/files/dn 50 50
+echo ENTER DATANODE TO DELETE
+read x
+ssh $x yum remove hadoop -y
+ssh $x rmdir /tmp/node
+sed -i 's/$x//' /root/Desktop/my_project/files/ipused
+sed -i 's/$x//' /root/Desktop/my_project/files/dn
+echo "to delete more press 1 "
+read c
+done
+bash hdfs1conf
+elif [ $b == "3.Back" ]
+then
+bash hdfs1conf1conf
+fi
+elif [ $a == "2.back" ]
+then
+bash hdfs1conf
+fi

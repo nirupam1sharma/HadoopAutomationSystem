@@ -1,0 +1,16 @@
+#!/bin/bash
+dialog --menu "Are you sure you want to continue " 30 30 5 "1.continue" "" "2.back" "" 2> yn
+a=`cat yn`
+rm yn
+if [ $a == "1.continue" ] 
+then
+i=`cat /root/Desktop/my_project/files/nn`
+ssh $i yum remove hadoop -y
+ssh $i rmdir /tmp/node
+sed -i 's/$i//' /root/Desktop/my_project/files/ipused
+rm /root/Desktop/my_project/files/nn
+echo "no" >/root/Desktop/my_project/files/hdfspresent
+else
+bash hdfs1conf
+fi
+bash hdfs1conf

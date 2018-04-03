@@ -1,0 +1,63 @@
+#!/bin/bash
+x=`cat /root/Desktop/my_project/files/mapreducepresent`
+if [ $x == "no" ]
+then
+dialog --msgbox "New mapreduce creation wizard " 5 36
+dialog --menu "&&&&&& CHOOSE WISELY &&&&&&" 20 40 20 1 "1.Create job tracker" 2 "2.Delete job tracker" 3 "3.Create task tracker" 4 "4.Delete task tracker" 5 "5.Back" 2>f.txt
+c=`cat f.txt`
+rm f.txt
+if [ $c == 1 ]
+then
+bash jobtracker
+elif [ $c == 2 ]
+then
+bash deljobtracker
+elif [ $c == 3 ]
+then
+bash tasktracker
+elif [ $c == 4 ]
+then
+bash deltasktracker
+elif [ $c == 5 ]
+then
+bash hadoopv1
+fi
+elif [ $x == "yes" ]
+then
+dialog --msgbox "mapreduce modification wizard. Press ok to continue " 6 40
+dialog --menu "********CHOOSE WISELY***********" 35 40 20 1 "1.Remove job tracker" 2 "2.Add Task tracker" 3 "3.Remove tasktracker" 4 "4.Start Job tracker" 5 "5.Stop Job Tracker" 6 "6.Start Task Tracker" 7 "7.Stop task tracker" 8 "8.Summary" 9 "9.Excludenodes" 10 "10.Back" 2> chv1
+ch=`cat chv1`
+rm chv1
+if [ $ch == 1 ]
+then
+bash deljobtracker
+elif [ $ch == 2 ]
+then
+bash tasktracker
+elif [ $ch == 3 ]
+then 
+bash deltasktracker
+elif [ $ch == 4 ]
+then
+bash startjobtracker
+elif [ $ch == 5 ]
+then
+bash stopjobtracker
+elif [ $ch == 6 ]
+then
+bash starttasktracker
+elif [ $ch == 7 ]
+then
+bash stoptasktracker
+elif [ $ch == 8 ]
+then
+bash summarymapreduce
+elif [ $ch == 9 ]
+then
+bash excludemapreduce
+elif [ $ch == 10 ]
+then
+bash hadoopv1
+fi 
+fi
+

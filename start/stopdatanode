@@ -1,0 +1,31 @@
+#!/bin/bash
+dialog --menu "choose option" 30 30 4 "1.All" "" "2.Manual" "" 2>chn
+c=`cat chn`
+rm chn
+if [ $c == "1.All" ] 
+then
+for i in `cat /root/Dekstop/my_project/files/dn`
+do
+ssh $i hadoop-daemon.sh stop datanode
+done
+dialog --msgbox "All datanodes stopped " 30 30
+bash hdfs1conf
+elif [ $c == "2.Manual" ]
+then
+choi=1
+chio=0
+x=`cat /root/Desktop/my_project/files/avai_nodes | wc -l`
+while [ $choi == 1 ]
+do
+dialog --textbox /root/Desktop/my_project/files/dn 50 50
+echo "enter datanode ip "
+read p
+ssh $p hadoop-daemon.sh stop datanode
+let chio+=1
+echo "to continue stoping press one"
+read choi   
+done
+dialog --msgbox "Manually datanodes stoped " 30 30
+bash hdfs1conf
+fi
+

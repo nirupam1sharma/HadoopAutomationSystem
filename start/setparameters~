@@ -1,0 +1,46 @@
+#!/bin/bash
+dialog --infobox "Before we begin setting up Hdfs. Lets configure the system" 5 70 
+sleep 2
+dialog --inputbox "enter the block size in MBs (Default:67108864)" 50 40 2>bf
+b=`cat bf`
+rm bf
+dialog --inputbox "enter the replication value (Default:3)" 10 40 2>rf
+r=`cat rf`
+rm rf
+dialog --inputbox "enter the heartbeat value (Default:10sec)" 10 40 2>hf
+h=`cat hf`
+rm hf
+cd /root/Desktop/my_project/config/
+echo '<?xml version="1.0"?>
+<?xml-stylesheet type="text/xsl" href="configuration.xsl"?>
+	
+<!-- Put site-specific property overrides in this file. -->
+
+<configuration>
+<property>
+<name>dfs.name.dir</name>
+<value>/tmp/node</value>
+</property>
+<property>
+<name>dfs.block.size</name>
+<value>'"$b"'</value>
+</property>
+<property>
+<name>dfs.replication</name>
+<value>'"$r"'</value>
+</property>
+<property>
+<name>dfs.http.address</name>
+<value>0.0.0.0:50070</value>
+</property>
+<property>
+<name>dfs.heartbeat_interval</name>
+<value>'"$h"'</value>
+</property>
+<property>
+<name>dfs.hosts.exclude</name>
+<value>/etc/haddop/denyfile</value>
+</property>
+</configuration>' &> nhdfs-site.xml
+cd /root/Desktop/my_project/start/
+bash /root/Desktop/my_project/start/createname

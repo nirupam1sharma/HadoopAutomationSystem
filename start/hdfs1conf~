@@ -1,0 +1,64 @@
+#!/bin/bash
+dialog --infobox "***WELCOME TO HDFS SETUP MENU***" 3 40
+sleep 3
+a=`cat /root/Desktop/my_project/files/hdfspresent`
+if [ $a == "no" ]
+then
+dialog --msgbox "New hdfs creation wizard. Press ok to continue " 6 40
+dialog --menu "********HDFS SETUP MENU***********" 15 40 9 "1.Createname" ""  "2.Deletename" "" "3.Createdata" "" "4.Deletedata" "" "5.Back" "" 2> chv1
+ch=`cat chv1`
+rm chv1
+if [ $ch == "1.Createname" ]
+then
+bash setparameters
+elif [ $ch == "2.Deletename" ]
+then
+bash delname
+elif [ $ch == "4.Deletedata" ]
+then
+bash deldata
+elif [ $ch == "3.Createdata" ]
+then 
+bash createdata
+elif [ $ch == "5.Back" ]
+then
+bash hadoopv1
+fi
+elif [ $a == "yes" ]
+then
+dialog --msgbox "hdfs modification wizard. Press ok to continue " 6 40
+dialog --menu "********HDFS SETUP MENU***********" 35 40 20 "1.Deletename" "" "2.Adddata" "" "3.Deletedata" "" "4.Changeparameters" "" "5.Startnamenode" "" "6.Stopnamenode" "" "7.Startdatanode" "" "8.Stopdatanode" "" "9.Summary" "" "10.Back" "" "11.Exclude data nodes" "" 2> chv1
+ch=`cat chv1`
+rm chv1
+if [ $ch == "1.Deletename" ]
+then
+bash delname
+elif [ $ch == "4.Deletedata" ]
+then
+bash deldata
+elif [ $ch == "3.Adddata" ]
+then 
+bash createdata
+elif [ $ch == "11.Back" ]
+then
+bash hadoopv1
+elif [ $ch == "5.Changeparameters" ]
+then
+bash changeparameters
+elif [ $ch == "6.Startnamenode" ]
+then
+bash startnamenode
+elif [ $ch == "7.Stopnamenode" ]
+then
+bash stopnamenode
+elif [ $ch == "8.Startdatanode" ]
+then
+bash startdatanode
+elif [ $ch == "9.Stopdatanode" ]
+then
+bash stopdatanode
+elif [ $ch == "10.Summary" ]
+then
+bash summary
+fi 
+fi

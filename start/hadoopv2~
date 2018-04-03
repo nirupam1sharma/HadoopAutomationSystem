@@ -1,0 +1,26 @@
+#!/bin/bash
+dialog --menu "*****HADOOPV2 SETUP MENU*******" 15 40 10 "1.HDFS" ""  "2.MAPREDUCE" "" "3.HIVE" "" "4.PIG" "" "5.DATASETS" "" "6.SUMMARY" "" "7.BACK" "" 2> chv2
+ch=`cat chv2`
+rm chv2
+if [ $ch == "1.HDFS" ]
+then
+bash hdfs2conf
+elif [ $ch == "2.MAPREDUCE" ]
+then
+bash mapreduce2conf
+elif [ $ch == "3.HIVE" ]
+then
+bash hiveconf
+elif [ $ch == "4.PIG" ]
+then
+bash pigconf
+elif [ $ch == "5.DATASETS" ]
+then 
+bash datasets
+elif [ $ch == "6.SUMMARY" ]
+then
+bash summary2
+elif [ $ch == "7.BACK" ]
+then
+bash versionmenu
+fi

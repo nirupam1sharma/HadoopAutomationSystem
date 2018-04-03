@@ -1,0 +1,4 @@
+#!/bin/bash
+dialog --infobox "HADOOP version 1 is about to be installed on the system " 30 30 
+yum install hadoop -y
+yum install jdk -y

@@ -1,0 +1,32 @@
+#!/bin/bash
+dialog --menu "choose option" 30 30 4 "1.All" "" "2.Manual" "" 2>chn
+c=`cat chn`
+rm chn
+if [ $c == "1.All" ] 
+then
+for i in `cat /root/Dekstop/my_project/files/tt`
+do
+ssh $i hadoop-daemon.sh start tasktracker
+ssh $i jps
+done
+dialog --msgbox "All task trackers have been started " 30 30
+bash mapreduce1conf
+elif [ $c == "2.Manual" ]
+then
+choi=1
+x=`cat /root/Desktop/my_project/files/avai_nodes | wc -l`
+while [ $choi == 1 ]
+do
+dialog --textbox /root/Desktop/my_project/files/tt 50 50
+echo "enter tsk tracker ip "
+read p
+ssh $p hadoop-daemon.sh start tasktracker
+ssh $p jps
+echo "to continue to start more task tracker press one"
+read choi   
+done
+dialog --msgbox "manual task tracker startup completed " 40 40
+bash mapreduce1conf
+fi
+
+

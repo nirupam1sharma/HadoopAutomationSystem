@@ -1,0 +1,9 @@
+#!/bin/bash
+dialog --infobox "welcome to apache hadoop super computer setup wizard" 5 40
+sleep 3
+dialog --infobox "Before beginning we would like to thank you for choosing us" 5 65
+sleep 3
+dialog --msgbox "to continue press ok " 10 30
+pd=`pwd`
+cd $pd
+bash versionmenu

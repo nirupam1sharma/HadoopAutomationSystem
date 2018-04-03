@@ -1,0 +1,15 @@
+#!/bin/bash
+dialog --menu "#####HADOOP VERSION SELECTION MENU ######" 15 40 5 "1.hadoopv1" ""  "2.hadoopv2" "" "3.exit" "" 2> version
+v=`cat version`
+rm version
+if [ $v == "1.hadoopv1" ]
+then
+bash hadoopv1
+else if [ $v == "2.hadoopv2" ] 
+then
+bash hadoopv2
+else
+dialog --infobox "good bye" 3 20
+sleep 3
+fi
+fi

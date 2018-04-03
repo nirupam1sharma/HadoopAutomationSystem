@@ -1,0 +1,9 @@
+#!/bin/bash
+ssh-keygen
+dialog --inputbox "Enter the first ip address " 20 40 2>net_name
+dialog --inputbox "Enter the final ip address value " 20 40 2>final_name
+n=`cat net_name`
+f=`cat final_name`
+nmap -sP $n-$f -n | grep "Nmap scan"| awk '{print $5}' >avai_nodes
+dialog --msgbox " press ok to see list of available nodes "  20 30
+mv avai_nodes /root/Desktop/my_project/files/avai_nodes

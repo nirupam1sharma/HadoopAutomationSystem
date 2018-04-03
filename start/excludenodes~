@@ -1,0 +1,41 @@
+#!/bin/bash
+dialog --infobox "Security wizard is about to open " 5 37 
+sleep 2
+dialog --menu "Choose one option" 30 30 10  1 "1.See active nodes in network" 2 "2.Exclude/Deny nodes" 3 "3.See list of denied hosts" 4 "4.Include denied hosts" 5 "5.Back" 2>c
+cx=`cat c`
+rm c
+if [ $cx == 1 ]
+then
+dialog --textbox  /root/Desktop/my_project/files/avai_nodes 50 50
+dialog --msgbox "To continue press ok" 10 20
+bash excludenodes
+elif [ $cx == 2 ]
+then
+ch=1
+while [ $ch == 1 ]
+do
+dialog --textbox  /root/Desktop/my_project/files/avai_nodes 50 50
+echo "enter node ip to exclude"
+read exp
+echo $exp >> /root/Desktop/my_project/files/denyfile
+echo "to continue press 1"
+read ch 
+done
+x=`cat /root/Desktop/my_project/files/nn`
+scp /root/Desktop/my_project/files/denyfile $x:/etc/hadoop/denyfile
+ssh $x hadoop dfsadmin -refreshNodes
+dialog --msgbox "hosts exclusion done " 10 20
+bash excludenodes 
+elif [ $cx == 3 ]
+dialog --textbox /root/Desktop/my_project/files/denyfile 40 40
+bash excludenodes
+elif [ $cx == 4 ]
+then
+dialog --textbox /root/Desktop/my_project/files/denyfile 40 40
+echo "enter host to include "
+read p
+sed -i 's/$p//' /root/Desktop/my_project/files/denyfile
+x=`cat /root/Desktop/my_project/files/nn`
+scp /root/Desktop/my_project/files/denyfile $x:/etc/hadoop/denyfile
+ssh $x hadoop dfsadmin -refreshNodes 
+fi

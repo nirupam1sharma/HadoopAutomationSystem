@@ -1,0 +1,19 @@
+#!/bin/bash
+dialog --menu "####summary####" 40 40 7 1 "1.Jobtracker" 2 "2.Tasktracker" 3 "3.back" 2>x
+y=`cat x`
+rm x
+if [ $y == 1 ] 
+then
+dialog --textbox  /root/Desktop/my_project/files/jt  20 30
+sleep 3
+bash summary
+elif [ $y == 2 ]
+then
+dialog --textbox  /root/Desktop/my_project/files/tt  40 30
+sleep 3
+bash summary
+elif [ $y == 3 ]
+then
+dialog --msgbox "to go back press ok " 20 30
+bash mapreduce1conf
+fi

@@ -1,0 +1,102 @@
+#!/bin/bash
+my_name=`ifconfig eth0 |grep 192|awk '{print $2}'| cut -f2 -d ":"`
+dialog --infobox "Welcome to Mapreducev1 job tracker setup program" 3 56
+sleep 2
+dialog --menu "&&&&&& CHOOSE WISELY &&&&&&" 20 40 5 1 "1.Namenode as job tracker" 2 "2.Separate job tracker" 3 "3.Back" 2>f.txt
+y=`cat f.txt`
+rm f.txt
+if [ $y == 1 ]
+then
+x=`cat /root/Desktop/my_project/files/nn`
+dialog --inputbox "Enter the port number of Jobtracker" 10 35 2> jobport.txt
+port_name=`cat jobport.txt`
+rm jobport.txt
+echo "<?xml version="1.0"?>
+<?xml-stylesheet type="text/xsl" href="configuration.xsl"?>
+
+<!-- Put site-specific property overrides in this file. -->
+
+<configuration>
+<property>
+<name>mapred.job.tracker</name>
+<value>'"$x:$port_name"'</value>
+</property>
+<property>
+<name>mapred.hosts.exclude</name>
+<value>/etc/hadoop/denytracker</value>
+</property>
+</configuration>
+" &> /root/Desktop/my_project/config/mapred-site.xml 
+scp /root/Desktop/my_project/config/mapred-site.xml $x:/etc/hadoop/mapred-site.xml
+ssh $x touch /etc/hadoop/denytracker
+echo $x >/root/Desktop/my_project/files/jt
+dialog --msgbox "Job tracker configured" 10 30
+bash mapreduce1conf
+elif [ $y == 2 ]
+then
+dialog --msgbox "Define policy for job tracker" 7 40
+dialog --inputbox "enter storage in MegaBytess" 20 40 2>str.txt
+dialog --inputbox "enter RAM in MegaBytess" 20 40 2>fr.txt
+str=`cat str.txt`
+rm str.txt
+fr=`cat fr.txt`
+rm fr.txt
+dialog --msgbox "To see list of available nodes press ok " 10 40
+dialog --textbox /root/Desktop/my_project/files/avai_nodes 50 30
+z=`cat /root/Desktop/my_project/files/nn`
+echo namenode ip is $z . So choose some different host
+read x
+if [ $x == $z ]
+then
+dialog --msgbox "IP entered belongs to namenode .. Try again" 10 40
+bash jobtracker
+else
+ssh-copy-id $x
+scp /root/Desktop/my_project/start/policycheck   $x:/root/Desktop/
+ssh $x bash /root/Desktop/policycheck
+scp $x:/root/Desktop/poli.txt  $my_name:/root/Desktop/my_project/start/
+s=`cat poli.txt |grep st| cut -d: -f2`
+r=`cat poli.txt |grep mem| cut -d: -f2`
+echo $s
+echo $r
+if [ $s -gt $str -a $r -gt $fr ]
+then
+echo "policy satisfied"
+dialog --inputbox "Enter the port number of Jobtracker" 10 35 2> jobport.txt
+port_name=`cat jobport.txt`
+rm jobport.txt
+echo "<?xml version="1.0"?>
+<?xml-stylesheet type="text/xsl" href="configuration.xsl"?>
+
+<!-- Put site-specific property overrides in this file. -->
+
+<configuration>
+<property>
+<name>mapred.job.tracker</name>
+<value>'"$x:$port_name"'</value>
+</property>
+<property>
+<name>mapred.hosts.exclude</name>
+<value>/etc/hadoop/denytracker</value>
+</property>
+</configuration>
+" &> /root/Desktop/my_project/config/mapred-site.xml 
+ssh-copy-id $x
+ssh $x yum install hadoop -y
+ssh $x yum install jdk -y
+scp /root/Desktop/my_project/config/mapred-site.xml $x:/etc/hadoop/mapred-site.xml
+scp /root/Desktop/my_project/config/core-site.xml $x:/etc/hadoop/core-site.xml
+ssh $x touch /etc/hadoop/denytracker
+scp /root/Desktop/my_project/config/hadoop-env.sh  $x:/etc/hadoop/hadoop-env.sh.xml
+scp /root/Desktop/my_project/config/bash_profile  $x:/root/.bash_profile
+scp /root/Desktop/my_project/config/bashrc  $x:/root/.bashrc
+echo $x >/root/Desktop/my_project/files/jt
+echo $x >/root/Desktop/my_project/files/ipused
+dialog --msgbox "Job tracker configured" 10 30
+bash mapreduce1conf
+fi
+fi
+elif [ $y == 3 ]
+then
+bash mapreduce1conf
+fi
